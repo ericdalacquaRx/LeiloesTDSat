@@ -136,11 +136,27 @@ public class listagemVIEW extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String id = id_produto_venda.getText();
+       String id = id_produto_venda.getText();
         
-        ProdutosDAO produtosdao = new ProdutosDAO();
+        if (id == null || id.trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Informe o ID do produto que deseja vender.", "Venda não realizada", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         
-        //produtosdao.venderProduto(Integer.parseInt(id));
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            boolean sucesso = produtosdao.venderProduto(Integer.parseInt(id));
+            
+            if (sucesso) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Produto vendido com sucesso!", "Venda realizada", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                id_produto_venda.setText("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Não foi possível vender o produto. Verifique o ID informado.", "Venda não realizada", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException erro) {
+            javax.swing.JOptionPane.showMessageDialog(this, "O ID informado deve ser um número.", "Venda não realizada", javax.swing.JOptionPane.WARNING_MESSAGE);
+        }
+        
         listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
 
